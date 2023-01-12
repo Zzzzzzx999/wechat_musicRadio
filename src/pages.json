@@ -1,0 +1,113 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/home",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录账号"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/runningListening",
+			"style": {
+				"navigationBarTitleText": "跑步听"
+			}
+		},
+		{
+			"path": "pages/runningKnack",
+			"style": {
+				"navigationBarTitleText": "跑步小诀窍"
+			}
+		},
+		{
+			"path": "pages/myPage",
+			"style": {
+				"navigationBarTitleText": "我的主页"
+			}
+		},
+		{
+			"path": "pages/myWallet",
+			"style": {
+				"navigationBarTitleText": "我的钱包"
+			}
+		},
+		{
+			"path": "pages/setting",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/search",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		},
+		{
+			"path": "pages/searchResult",
+			"style": {
+				"navigationBarTitleText": "搜索结果"
+			}
+		},
+		{
+			"path": "pages/today-Best",
+			"style": {
+				"navigationBarTitleText": "今日优选"
+			}
+		},
+		{
+			"path": "pages/recentlyListened",
+			"style": {
+				"navigationBarTitleText": "最近收听"
+			}
+		},
+		{
+			"path": "pages/myDownloads",
+			"style": {
+				"navigationBarTitleText": "我的下载"
+			}
+		},
+		{
+			"path": "pages/myCollection",
+			"style": {
+				"navigationBarTitleText": "我的收藏"
+			}
+		},
+		{
+			"path": "pages/playPage",
+			"style": {
+				"navigationBarTitleText": "播放页"
+				
+			}
+		},
+		{
+			"path": "pages/gift",
+			"style": {
+				"navigationBarTitleText": "礼物榜"
+			}
+		},
+		{
+			"path": "pages/runningtest",
+			"style": {
+				"navigationBarTitleText": "跑步测试"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
