@@ -1,4 +1,6 @@
 import {getSongUrl,getSongLyric,getSonglist,getSongDetail,activeList} from "./service/songs";
+const app = getApp()
+
 export const audio={
     data() {
         return {
@@ -6,10 +8,9 @@ export const audio={
             backgroundAudioManager: '',  //播放器
             speedNow:1,     //当前倍速
             audio:{
-                src:'http://m7.music.126.net/20230111231702/116fba259b39ecea7b63a54bfe2d8385/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/2949327100/d639/cdf0/4d82/4c6377d52938fe3ffe5071a7ac202ece.mp3',
+                // src:'http://m7.music.126.net/20230111231702/116fba259b39ecea7b63a54bfe2d8385/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/2949327100/d639/cdf0/4d82/4c6377d52938fe3ffe5071a7ac202ece.mp3',
+                src:'',
             },
-
-
             //播放进度控制
             progress: 0,
             ct: '00:00',
@@ -24,19 +25,7 @@ export const audio={
         if (!this.backgroundAudioManager) {
             this.backgroundAudioManager = wx.getBackgroundAudioManager();
         }
-        this.backgroundAudioManager.title = '此时此刻'
-        this.backgroundAudioManager.autoplay = true
-        // this.backgroundAudioManager.epname = '此时此刻'
-        // this.backgroundAudioManager.singer = '许巍'
-        this.backgroundAudioManager.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
-        // 设置了 src 之后会自动播放
-        // this.backgroundAudioManager.src = 'https://www.cambridgeenglish.org/images/506891-a2-key-for-schools-listening-sample-test.mp3'
-        this.backgroundAudioManager.src = this.audio.src
-        setTimeout(() => {
-            this.backgroundAudioManager.onPlay((res) => {
-                console.log('onplay', res)
-            })
-        }, 100);
+        this.audioSet(query.id)
     },
     onUnload() {
         if (this.backgroundAudioManager) {
@@ -65,17 +54,37 @@ export const audio={
             }else{
                 this.backgroundAudioManager.pause() // 暂停
             }
+            this.autoPlay(this.playClick)
+            // clearInterval(playProgress)
         },
         // 调节倍速
         speedAudio(dataNow){
             this.speedNow = dataNow
             this.backgroundAudioManager.playbackRate = this.speedNow
         },
+        audioSet(id){
+            getSongUrl(id).then(res=>{
+                console.log('音乐详情',res);
+                this.backgroundAudioManager.title = '此时此刻'
+                // this.backgroundAudioManager.autoplay = true
+                // this.backgroundAudioManager.epname = '此时此刻'
+                // this.backgroundAudioManager.singer = '许巍'
+                this.backgroundAudioManager.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
+                // this.backgroundAudioManager.coverImgUrl = this.programsDetail[this.programsIndex]
+                this.backgroundAudioManager.src = res.data[0].url
+                this.audio.src = res.data[0].url
+                console.log('src',this.backgroundAudioManager.src);
+                this.backgroundAudioManager.onPlay((res) => {
+                    console.log('onplay', res)
+                })
+
+            })
+        }
     }
 }
 
-const app = getApp()
 import moment from 'moment'
+import { async } from "regenerator-runtime";
 let time = null
 export const abc = {
     data() {
@@ -293,6 +302,7 @@ export const abc = {
         },
         //切换歌曲
         changeSong(type) {
+            console.log('changeSongchangeSongchangeSongchangeSongchangeSongchangeSongchangeSong');
             clearTimeout(time)
             getSongDetail(app.getSong(type)).then(res => {
                 this.getSongInfo(res.songs[0])
@@ -313,27 +323,6 @@ export const abc = {
             let type = e.currentTarget.id 
             this.changeSong(type)
         },
-        // 点击改变进度条
-        changeProgress(e) {
-            console.log('changeProgress',e);
-            let self = this
-            let current = e.changedTouches[0].pageX - this.offsetLeft
-            if(current > 0 && current < this.width) {
-                let progress = current / this.width
-                let currentTime = app.globalData.backgroundAudioManager.duration * progress
-                for(let i = 0; i < self.lyric.length - 1; i++) {
-                    if(currentTime >= parseFloat(self.lyric[i][0]) && currentTime < parseFloat(self.lyric[i + 1][0])) {
-                        self.currentIndex = i,
-                        self.progress= progress * 100,
-                        self.isPlay= true
-                        break
-                    }
-                }
-                app.globalData.backgroundAudioManager.seek(currentTime)
-                app.globalData.backgroundAudioManager.play()
-            }
-        },
-    
         // 播放列表
         openList() {
             this.isShow = true
@@ -356,13 +345,14 @@ export const abc = {
         this.currentIndex = 0
     },
     onUnload: function() {
-        if(this.circleType == 'icon-B') {
+        /* if(this.circleType == 'icon-B') {
             app.globalData.active = '1'
         } else {
             app.globalData.active = '0'
         }
         app.globalData.pid = this.pid
         app.globalData.state = this.isPlay
-        option.id = this.songInfo.id
+        option.id = this.songInfo.id */
+        app.globalData.slider.value = this.slider.value
     }
 }

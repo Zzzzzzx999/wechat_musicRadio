@@ -1,7 +1,8 @@
 <template>
     <div class="playPage">
         <div class="playtop" :class="{'playMask':adjustSpeed,'vague':openDownload}">
-            <image mode="aspectFill" src="https://img0.baidu.com/it/u=1303479120,3193737549&fm=253&fmt=auto&app=138&f=JPEG?w=689&h=500"></image>
+            <!-- <image mode="aspectFill" src="https://img0.baidu.com/it/u=1303479120,3193737549&fm=253&fmt=auto&app=138&f=JPEG?w=689&h=500"></image> -->
+            <image mode="aspectFill" :src="programsDetail.coverUrl"></image>
             <div class="user">
                 <div class="number">
                     <span>11</span>
@@ -70,7 +71,7 @@
             </div>
         </div>
         <div class="playPageTitle">
-            <span>62从婴儿囚犯到皇帝</span>
+            <span>{{programsIndex+1}} {{programsDetail.name}}</span>
             <image src="../static/icon/playPage/24gf-ellipsis.png"></image>
         </div>
         <!-- 调节语速 -->
@@ -315,12 +316,32 @@ export default {
                 {id:23,name:'75海昏侯传奇',playBackVolume:'2.3',duration:'19:17',time:'2019.04.19',select:true},
             ],
             innerAudioContext: '',  //播放器
+            // playProgressSetinterval: '',  //进度条定时器
+            previousId:'', //上条音乐Id
+            programsDetail:[], //节目详情
+            programsIndex:0, //节目次序
         };
     },
-    onLoad() {
+    onLoad(query) {
+        if (!this.previousId) {
+            var playProgress = null
+        }
+        if (query.id == app.globalData.previousId) {
+            this.slider.value = app.globalData.slider.value
+        }
+        /* else if(query.id !== app.globalData.previousId && app.globalData.previousId !== ''){
+            clearInterval(playProgress)
+            console.log('@@@123');
+        } */
+        if (query.id !== app.globalData.previousId && playProgress != null) {
+            clearInterval(playProgress)
+        }
         setTimeout(() => {
-            this.autoPlay()
+            this.autoPlay(false,playProgress)
         }, 200);
+        app.globalData.previousId = query.id
+        this.programsDetail = app.globalData.programsDetail[this.programsIndex]
+        console.log('programsDetail',this.programsDetail);
     },
     methods: {
         changePath(path){
@@ -407,16 +428,25 @@ export default {
         //         console.log('音乐详情',res);
         //     })
         // }
-        autoPlay(){
+        autoPlay(playClick,playProgress){
+            // if(query.id !== app.globalData.previousId && !app.globalData.previousId){
+            //     clearInterval(playProgress)
+            // }
             console.log('autoPlay');
             this.slider.max = app.globalData.songTimeSeconds
             var that = this
-            var playProgress = setInterval(function(){
+            if (playClick) {
+                clearInterval(playProgress)
+            }
+            playProgress = setInterval(function(){
                 if (that.playClick && that.slider.value < that.slider.max){
                     that.slider.value++
+                    console.log(that.slider.value);
                 }else{
                     clearInterval(playProgress)
                     // this.changeSong()
+                    // this.audioSet()
+                    // this.slider.value = '0'
                 }
             }, 1000);
         },
@@ -443,10 +473,10 @@ export default {
             // this.slider.value = parseInt(current)
             // console.log(parseInt(current));
 
-            this.slider.value = e.detail.value
             // this.ct = moment(app.globalData.backgroundAudioManager.currentTime * 1000).format('mm:ss')
             // console.log('123',this.ct);
             // app.globalData.ct = this.ct
+            this.slider.value = e.detail.value
             app.globalData.backgroundAudioManager.seek(parseInt(this.slider.value))
             // app.globalData.backgroundAudioManager.play()
         },

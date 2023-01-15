@@ -32,6 +32,7 @@ import {getDetail,getProgram} from "./service/djprogram";
 				getProgram(rid).then(res=>{
 					console.log('节目详情',res)
 					wx.navigateTo({url:'/pages/playPage?id='+res.programs[1].mainSong.id})
+					this.globalData.programsDetail = res.programs
 				})
 			},
 
@@ -76,6 +77,13 @@ import {getDetail,getProgram} from "./service/djprogram";
 			active: '',
 			songTimeSeconds:'',
 			backgroundAudioManager:{},
+			playProgress:null,
+			programsDetail:[], //节目详情
+			previousId:'', //上条音乐id
+			slider:{
+               max:'100',
+               value:'0',
+            },
 		}
 	}
 </script>
