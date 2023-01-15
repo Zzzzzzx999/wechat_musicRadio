@@ -127,7 +127,7 @@
                 <div class="directoryTop">
                     <div class="directoryTopLeft">
                         <image src="../static/icon/playPage/23_顺序播放.png"></image>
-                        <span>顺序播放(62集)</span>
+                        <span>顺序播放({{chapters.length}}首)</span>
                     </div>
                     <div class="directoryTopRight">
                         <image id="rightItem" src="../static/icon/playPage/保存顺序.png"></image>
@@ -142,8 +142,8 @@
                             </div>
                             <div class="chapterItemLeftBottom">
                                 <span>{{chap.duration}}</span><span id="separate">|</span>
-                                <span>侯杨方</span><span id="separate">|</span>
-                                <span>西汉盛世的启示</span>
+                                <span>{{chap.dj.brand}}</span><span id="separate">|</span>
+                                <span>{{chap.description.substring(0,10)}}...</span>
                             </div>
                         </div>
                         <div class="chapterItemRight" @click.stop>
@@ -280,7 +280,7 @@ export default {
                 {id:4,name:'打榜',number:'',select:false},
             ],
             chapters:[
-                {id:1,name:'54婴儿囚犯',duration:'14:01',select:false},
+                /* {id:1,name:'54婴儿囚犯',duration:'14:01',select:false},
                 {id:2,name:'55千古一帝在悔悟: 不存在制造汉武帝',duration:'14:39',select:false},
                 {id:3,name:'56顾命大计: 周公辅成王与花海遗诏',duration:'15:26',select:false},
                 {id:4,name:'57汉武帝的评价 (上)',duration:'16:34',select:false},
@@ -288,7 +288,7 @@ export default {
                 {id:6,name:'59三驾马车的辅政团队',duration:'12:55',select:false},
                 {id:7,name:'60盐铁会议: 一个至今未能解决在争论',duration:'16:02',select:false},
                 {id:8,name:'61海昏侯传奇',duration:'19:17',select:false},
-                {id:9,name:'62从婴儿囚犯到皇帝',duration:'17:23',select:true},
+                {id:9,name:'62从婴儿囚犯到皇帝',duration:'17:23',select:true}, */
             ],
             programs:[
                 {id:1,name:'53汉武帝与太子微妙的关系',playBackVolume:'4.0',duration:'16:55',time:'2019.03.21',select:false},
@@ -341,7 +341,12 @@ export default {
         }, 200);
         app.globalData.previousId = query.id
         this.programsDetail = app.globalData.programsDetail[this.programsIndex]
-        console.log('programsDetail',this.programsDetail);
+        this.chapters = app.globalData.programsDetail
+        this.chapters = this.chapters.forEach((items) => {
+            items.select = false;
+        });
+        console.log('programsDetail',app.globalData.programsDetail);
+        console.log('chapters',this.chapters);
     },
     methods: {
         changePath(path){
@@ -826,10 +831,10 @@ export default {
             display: flex;
             flex-flow: column nowrap;
             .directoryTop{
-                height: 80rpx;
+                height: 150rpx;
                 width: 100%;
                 display: flex;
-                padding: 0 40rpx;
+                padding: 10rpx 40rpx;
                 box-sizing: border-box;
                 background-color: white;
                 .directoryTopLeft{
